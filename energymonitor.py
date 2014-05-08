@@ -70,7 +70,7 @@ def create_graph(rrd, interval):
 	os.system("rrdtool graph '/www/rrdtool/power-%s.png' \
 			--lazy \
 			-s -1%s \
-			-t Power Usage \
+			-t Power \
 			-h 80 \
 			-w 600 \
 			-a PNG \
