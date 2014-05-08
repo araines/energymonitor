@@ -1,4 +1,4 @@
-import sys, socket, re
+import sys, socket, re, time
 from pyrrd.rrd import DataSource, RRA, RRD
 from pyrrd.graph import DEF, LINE, GPRINT, Graph
 
@@ -55,8 +55,8 @@ def process_energy():
 	rrd = get_rrd_database()
 
 	# insert value into rrd
-	rrd.bufferValue('N:%s' % energy['current'])
-	rrd.update()
+	rrd.bufferValue('%s:%s' % time.time(), energy['current'])
+	rrd.update(template='power')
 
 	# create graphs
 	create_graph(rrd, 'day')
