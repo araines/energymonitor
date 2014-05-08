@@ -61,6 +61,7 @@ def process_energy():
 			N:%s" % (rrd, energy['current']))
 
 	# create graphs
+	create_graph(rrd, 'hour')
 	create_graph(rrd, 'day')
 	create_graph(rrd, 'week')
 	create_graph(rrd, 'month')
