@@ -71,13 +71,19 @@ def create_graph(rrd, interval):
 	os.system("rrdtool graph '/www/rrdtool/power-%s.png' \
 			--lazy \
 			-s -1%s \
-			-t Power \
-			-h 80 \
+			-t 'Power Usage (last %s)' \
+			-h 160 \
 			-w 600 \
 			-a PNG \
 			-v Watts \
+			-l 0 \
 			DEF:power=%s:power:AVERAGE \
-			LINE2:power#0000FF:Power" % (interval, interval, rrd))
+			AREA:power#0000FF:Power \
+			GPRINT:power:MIN:\"  Min\\: %%2.lf\" \
+			GPRINT:power:MAX:\"  Max\\: %%2.lf\" \
+			GPRINT:power:AVERAGE:\"  Avg\\: %%4.1lf\" \
+			GPRINT:power:LAST:\" Current\\: %%2.lf Watts\\n\" \	
+			" % (interval, interval, interval, rrd))
 
 if __name__ == "__main__":
 	process_energy()
