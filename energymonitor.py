@@ -1,5 +1,6 @@
 import sys, socket, re
 from pyrrd.rrd import DataSource, RRA, RRD
+from pyrrd.graph import DEF, LINE, GPRINT, Graph
 
 RRD_IMAGES_LOCATION  = '/www/rrdtool'
 
@@ -15,7 +16,8 @@ def get_energy():
 	rx_sock.bind(('0.0.0.0', 9761))
 
 	msg = '100,@?W'
-	data, addr = tx_sock.sendto(msg, ('255.255.255.255', 9760))
+	tx_sock.sendto(msg, ('255.255.255.255', 9760))
+	data = rx_sock.recv(1024)
 
 	valid    = re.compile(r'^\d{1,3},\?W=([0-9,]+)\r\n$')
 	match    = valid.match(data)
@@ -61,7 +63,6 @@ def process_energy():
 	create_graph(rrd, 'month')
 	create_graph(rrd, 'year')
 
-from pyrrd.graph import DEF, LINE, GPRINT, Graph
 def create_graph(rrd, interval):
 	def1  = DEF(rrdfile=rrd.filename, vname='Power', dsName='power')
 	line1 = LINE(defObj=def1, color='#0000FF', legend='Power Used')
