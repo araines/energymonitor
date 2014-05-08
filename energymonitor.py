@@ -1,4 +1,4 @@
-import sys, socket, re, time, os.path, os.system
+import sys, socket, re, time, os.path, os
 #from pyrrd.rrd import DataSource, RRA, RRD
 #from pyrrd.graph import DEF, LINE, GPRINT, Graph
 
