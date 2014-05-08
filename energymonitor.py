@@ -82,7 +82,7 @@ def create_graph(rrd, interval):
 			GPRINT:power:MIN:\"  Min\\: %%2.lf\" \
 			GPRINT:power:MAX:\"  Max\\: %%2.lf\" \
 			GPRINT:power:AVERAGE:\"  Avg\\: %%4.1lf\" \
-			GPRINT:power:LAST:\" Current\\: %%2.lf Watts\\n\" \	
+			GPRINT:power:LAST:\" Current\\: %%2.lf Watts\\n\" \
 			" % (interval, interval, interval, rrd))
 
 if __name__ == "__main__":
