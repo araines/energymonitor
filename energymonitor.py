@@ -12,7 +12,7 @@ def get_energy():
 	rx_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	rx_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	rx_sock.settimeout(2.0)
-	rx_sock.bind('0.0.0.0', 9761)
+	rx_sock.bind(('0.0.0.0', 9761))
 
 	msg = '100,@?W'
 	data, addr = tx_sock.sendto(msg, ('255.255.255.255', 9760))
