@@ -37,13 +37,13 @@ def get_rrd_database():
 	if not os.path.isfile(rrd_db):
 
 		print ("Creating RRD database for power")
-		os.system("rrdtool create %s   \
-				-s 300                 \
-				DS:power:GAUGE:600:U:U \
-				RRA:AVERAGE:0.5:1:576  \
-				RRA:AVERAGE:0.5:6:672   \
-				RRA:AVERAGE:0.5:24:732   \
-				RRA:AVERAGE:0.5:144:1460" % rrd_db)
+		os.system("rrdtool create %s     \
+				-s 60                    \
+				DS:power:GAUGE:120:U:U   \
+				RRA:AVERAGE:0.5:1:10080  \
+				RRA:AVERAGE:0.5:60:720   \
+				RRA:AVERAGE:0.5:180:480  \
+				RRA:AVERAGE:0.5:1440:730" % rrd_db)
 
 	return rrd_db
 
@@ -67,7 +67,7 @@ def process_energy():
 	create_graph(rrd, 'year')
 
 def create_graph(rrd, interval):
-	os.system("rrdtool graph '/www/rrdtool/power.png' \
+	os.system("rrdtool graph '/www/rrdtool/power-%s.png' \
 			--lazy \
 			-s -1%s \
 			-t Power Usage \
@@ -76,7 +76,7 @@ def create_graph(rrd, interval):
 			-a PNG \
 			-v Watts \
 			DEF:power=%s:power:AVERAGE \
-			LINE2:power#0000FF:Power" % (interval, rrd))
+			LINE2:power#0000FF:Power" % (interval, interval, rrd))
 
 if __name__ == "__main__":
 	process_energy()
