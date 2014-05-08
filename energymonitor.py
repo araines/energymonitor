@@ -55,7 +55,7 @@ def process_energy():
 	rrd = get_rrd_database()
 
 	# insert value into rrd
-	rrd.bufferValue('%s:%s' % time.time(), energy['current'])
+	rrd.bufferValue('%s:%s' % (time.time(), energy['current']))
 	rrd.update(template='power')
 
 	# create graphs
