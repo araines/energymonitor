@@ -1,7 +1,8 @@
-import sys, socket, re, time
+import sys, socket, re, time, os.path
 from pyrrd.rrd import DataSource, RRA, RRD
 from pyrrd.graph import DEF, LINE, GPRINT, Graph
 
+RRD_DB_LOCATION      = '/www/rrdtool'
 RRD_IMAGES_LOCATION  = '/www/rrdtool'
 
 def get_energy():
@@ -32,7 +33,10 @@ def get_energy():
 	return None
 
 def get_rrd_database():
-	# TODO: Load from existing file
+	rrd_db = '/www/rrdtool/power.rrd'
+	if os.path.isfile(rrd_db):
+		return RRD(rrd_db, mode='r')
+
 	print ("Creating RRD database for power")
 	dss  = []
 	rras = []
@@ -55,7 +59,7 @@ def process_energy():
 	rrd = get_rrd_database()
 
 	# insert value into rrd
-	rrd.bufferValue('%s:%s' % (time.time(), energy['current']))
+	rrd.bufferValue('%s:%s' % (int(time.time()), energy['current']))
 	rrd.update(template='power')
 
 	# create graphs
