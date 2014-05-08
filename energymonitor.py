@@ -42,7 +42,7 @@ def get_rrd_database():
 	rras.append(RRA(cf='AVERAGE', xff=0.5, steps=24,  rows=732))
 	rras.append(RRA(cf='AVERAGE', xff=0.5, steps=144, rows=1460))
 
-	rrd = RRD('/www/rrdtool/power.rrd', ds=dss, rra=rras, start=300)
+	rrd = RRD('/www/rrdtool/power.rrd', ds=dss, rra=rras)
 	rrd.create()
 
 	return rrd
