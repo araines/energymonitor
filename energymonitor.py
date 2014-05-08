@@ -76,8 +76,7 @@ def create_graph(rrd, interval):
 			-a PNG \
 			-v Watts \
 			DEF:power=%s:power:AVERAGE \
-			LINE2:power#0000FF:Power \
-			GPRINT:power:MIN: Min\\: %2.1f" % (interval, rrd))
+			LINE2:power#0000FF:Power" % (interval, rrd))
 
 if __name__ == "__main__":
 	process_energy()
