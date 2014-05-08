@@ -45,6 +45,8 @@ def get_rrd_database():
 				RRA:AVERAGE:0.5:24:732   \
 				RRA:AVERAGE:0.5:144:1460" % rrd_db)
 
+	return rrd_db
+
 
 def process_energy():
 	energy = get_energy()
@@ -54,8 +56,9 @@ def process_energy():
 	rrd = get_rrd_database()
 
 	# insert value into rrd
-	rrd.bufferValue('%s:%s' % (int(time.time()), energy['current']))
-	rrd.update(template='power')
+	os.system("rrdtool update %s    \
+			-t power                \
+			N:%s" % (rrd, energy['current']))
 
 	# create graphs
 	create_graph(rrd, 'day')
@@ -64,11 +67,17 @@ def process_energy():
 	create_graph(rrd, 'year')
 
 def create_graph(rrd, interval):
-	def1  = DEF(rrdfile=rrd.filename, vname='Power', dsName='power')
-	line1 = LINE(defObj=def1, color='#0000FF', legend='Power Used')
-	g     = Graph('/www/rrdtool/power.png')
-	g.data.extend([def1, line1])
-	g.write()
+	os.system("rrdtool graph '/www/rrdtool/power.png' \
+			--lazy \
+			-s -1%s \
+			-t Power Usage \
+			-h 80 \
+			-w 600 \
+			-a PNG \
+			-v Watts \
+			DEF:power=%s:power:AVERAGE \
+			LINE2:power#0000FF:Power \
+			GPRINT:power:MIN: Min\\: %2.1f" % (interval, rrd))
 
 if __name__ == "__main__":
 	process_energy()
