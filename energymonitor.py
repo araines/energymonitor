@@ -36,7 +36,7 @@ def get_rrd_database():
 	print ("Creating RRD database for power")
 	dss  = []
 	rras = []
-	dss.append(DataSource(dsName='power', dsType='GAUGE'))
+	dss.append(DataSource(dsName='power', dsType='GAUGE', heartbeat=600))
 	rras.append(RRA(cf='AVERAGE', xff=0.5, steps=1,   rows=576))
 	rras.append(RRA(cf='AVERAGE', xff=0.5, steps=6,   rows=672))
 	rras.append(RRA(cf='AVERAGE', xff=0.5, steps=24,  rows=732))
@@ -56,6 +56,7 @@ def process_energy():
 
 	# insert value into rrd
 	rrd.bufferValue('N:%s' % energy['current'])
+	rrd.update()
 
 	# create graphs
 	create_graph(rrd, 'day')
