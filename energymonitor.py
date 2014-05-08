@@ -70,3 +70,6 @@ def create_graph(rrd, interval):
 	g     = Graph('/www/rrdtool/power.png')
 	g.data.extend([def1, line1])
 	g.write()
+
+if __name__ == "__main__":
+	process_energy()
