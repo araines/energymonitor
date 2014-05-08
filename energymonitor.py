@@ -1,6 +1,6 @@
-import sys, socket, re, time, os.path
-from pyrrd.rrd import DataSource, RRA, RRD
-from pyrrd.graph import DEF, LINE, GPRINT, Graph
+import sys, socket, re, time, os.path, os.system
+#from pyrrd.rrd import DataSource, RRA, RRD
+#from pyrrd.graph import DEF, LINE, GPRINT, Graph
 
 RRD_DB_LOCATION      = '/www/rrdtool'
 RRD_IMAGES_LOCATION  = '/www/rrdtool'
@@ -34,22 +34,17 @@ def get_energy():
 
 def get_rrd_database():
 	rrd_db = '/www/rrdtool/power.rrd'
-	if os.path.isfile(rrd_db):
-		return RRD(rrd_db, mode='r')
+	if not os.path.isfile(rrd_db):
 
-	print ("Creating RRD database for power")
-	dss  = []
-	rras = []
-	dss.append(DataSource(dsName='power', dsType='GAUGE', heartbeat=600))
-	rras.append(RRA(cf='AVERAGE', xff=0.5, steps=1,   rows=576))
-	rras.append(RRA(cf='AVERAGE', xff=0.5, steps=6,   rows=672))
-	rras.append(RRA(cf='AVERAGE', xff=0.5, steps=24,  rows=732))
-	rras.append(RRA(cf='AVERAGE', xff=0.5, steps=144, rows=1460))
+		print ("Creating RRD database for power")
+		os.system("rrdtool create %s   \
+				-s 300                 \
+				DS:power:GAUGE:600:U:U \
+				RRA:AVERAGE:0.5:1:576  \
+				RRA:AVERAGE:0.5:6:672   \
+				RRA:AVERAGE:0.5:24:732   \
+				RRA:AVERAGE:0.5:144:1460" % rrd_db)
 
-	rrd = RRD('/www/rrdtool/power.rrd', ds=dss, rra=rras)
-	rrd.create()
-
-	return rrd
 
 def process_energy():
 	energy = get_energy()
