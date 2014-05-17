@@ -72,8 +72,8 @@ def create_graph(rrd, interval):
 			--lazy \
 			-s -1%s \
 			-t 'Power Usage (last %s)' \
-			-h 160 \
-			-w 600 \
+			-h 200 \
+			-w 900 \
 			-a PNG \
 			-v Watts \
 			-l 0 \
